@@ -34,7 +34,7 @@ export const passportCall = (strategy) => {
     }
 }
 
-const initalizatePassport = () => {
+const initializePassport = () => {
 
     passport.use('register', new localStrategy({passReqToCallback: true, usernameField: 'email'}, async (req,username, password, done) => {
         try {
@@ -129,4 +129,4 @@ const initalizatePassport = () => {
     })
 }
 
-export default initalizatePassport
+export default initializePassport
