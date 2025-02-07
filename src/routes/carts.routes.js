@@ -5,11 +5,11 @@ import { authorization } from "../config/middleware.js";
 const cartRouter = Router()
 
 cartRouter.get('/:cid', getCart )
-cartRouter.post('/', createCart )
-cartRouter.post('/:cid/products/:pid', insertProductCart)
-cartRouter.put('/:cid', updateProductCart)
-cartRouter.put('/:cid/products/:pid', updateQuantityProductCart )
-cartRouter.delete('/:cid', deleteCart )
-cartRouter.delete('/:cid/products/:pid', deleteProductCart )
+cartRouter.post('/', authorization("Usuario"), createCart )
+cartRouter.post('/:cid/products/:pid', authorization("Usuario"), insertProductCart)
+cartRouter.put('/:cid', authorization("Usuario"), updateProductCart)
+cartRouter.put('/:cid/products/:pid', authorization("Usuario"), updateQuantityProductCart )
+cartRouter.delete('/:cid', authorization("Usuario"), deleteCart )
+cartRouter.delete('/:cid/products/:pid', authorization("Usuario"), deleteProductCart )
 
 export default cartRouter

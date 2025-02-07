@@ -1,7 +1,6 @@
 import { Router } from "express";
-import passport from "../config/passport.config.js";
-import passport from "passport-local";
-import { login, register, viewLogin, viewRegister, githublogin } from "../controllers/sessionsController";
+import passport from "passport";
+import { login, register, viewLogin, viewRegister, githublogin } from "../controllers/sessionsController.js";
 import { authorization } from "../config/middleware.js";
 
 const sessionRouter = Router();
