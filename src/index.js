@@ -20,7 +20,7 @@ app.use(express.json())
 app.use(cookieParser())
 app.use(session({
     store: MongoStore.create({
-        mongoUrl: "mongodb+srv://nvherreramartinez:XG0HSzVpr5pgClJJ@cluster0.ymen3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+        mongoUrl: "mongodb+srv://nvherreramartinez:@cluster0.ymen3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
         mongoOptions: {},
         ttl: 15
     }),
@@ -28,7 +28,7 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
-mongoose.connect("mongodb+srv://nvherreramartinez:XG0HSzVpr5pgClJJ@cluster0.ymen3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+mongoose.connect("mongodb+srv://nvherreramartinez:@cluster0.ymen3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
 .then(() => console.log("DB conectada"))
 .catch((e) => console.log("Error de conexión a DB:", e))
 
