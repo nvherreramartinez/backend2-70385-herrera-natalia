@@ -1,7 +1,7 @@
 import cartModel from '../models/cart.js'
 import productModel from '../models/product.js'
 import ticketModel from '../models/ticket.js'   
-import crypto from 'crypto'    
+import crypto from 'crypto'  
 
 export const getCart = async (req, res) => {
     try{

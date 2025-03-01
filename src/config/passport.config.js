@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import passport from "passport";
 import local from 'passport-local';
 import GithubStrategy from 'passport-github2';
