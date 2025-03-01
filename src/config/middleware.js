@@ -1,5 +1,3 @@
-
-
 export const authorization = (rol) => {
     return async(req, res, next) => {
         if(!req.user) 
