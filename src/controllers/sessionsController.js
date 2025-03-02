@@ -3,7 +3,7 @@ import { generateToken } from '../utils/jwt.js';
 export const login = async (req, res) => {
     try{
         if(!req.user){
-            return res.status(401).send("Usuario o contraseña incorrectos");
+            return res.status(401).send("Usuario o contraseña invalido");
         }
         const token = generateToken(req.user);
         req.session.user = {
@@ -30,10 +30,18 @@ export const register = async (req, res) => {
     }
 }
 export const viewRegister = (req, res) => {
-    res.status(200).render('templates/register', {})
+    res.status(200).render('templates/register', {
+        title: "Registro de Usuario",
+        url_js: "/js/register.js",
+        url_css: "/css/register.css"
+    })
 }
 export const viewLogin = (req, res) => {
-    res.status(200).render('templates/login', {})
+    res.status(200).render('templates/login', {
+        title: "Inicio de Sesion de Usuario",
+        url_js: "/js/login.js",
+        url_css: "/css/login.css"
+    })
 }
 export const githublogin = (req, res) => {
     try{
@@ -47,4 +55,9 @@ export const githublogin = (req, res) => {
         res.status(500).send("Error al loguear usuario")
     }
 }
-
+export const loginFail = (req, res) => {
+    res.status(401).render('error', { 
+        title: "Error de Login",
+        message: "Usuario o contraseña incorrectos."
+    });
+};

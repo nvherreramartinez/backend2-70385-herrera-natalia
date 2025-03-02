@@ -17,18 +17,18 @@ const hbs = create()
 
 
 app.use(express.json())
-app.use(cookieParser())
+app.use(cookieParser(process.env.SECRET_COOKIE))
 app.use(session({
     store: MongoStore.create({
-        mongoUrl: "mongodb+srv://nvherreramartinez:@cluster0.ymen3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+        mongoUrl: process.env.URL_MONGO,
         mongoOptions: {},
-        ttl: 15
+        ttl: 1500000000
     }),
-    secret: 'SessionSecret',
+    secret: process.env.SECRET_SESSION,
     resave: true,
     saveUninitialized: true
 }))
-mongoose.connect("mongodb+srv://nvherreramartinez:@cluster0.ymen3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+mongoose.connect(process.env.URL_MONGO)
 .then(() => console.log("DB conectada"))
 .catch((e) => console.log("Error de conexión a DB:", e))
 
