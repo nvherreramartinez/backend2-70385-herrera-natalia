@@ -7,6 +7,7 @@ export const getProducts = async (req, res) => {
         
         const pag = page !== undefined ? page: 1
         const limi = limit !== undefined || limit !== null ? limit: 10
+
         const filQuery = metFilter !== undefined ? {[metFilter]: filter} : {}
         const ordQuery = metOrder !== undefined ? {metOrder: ord} : {}
         
@@ -17,7 +18,6 @@ export const getProducts = async (req, res) => {
             number: i + 1,
             isCurrent: i + 1 === prods.page
         }))
-        console.log(prods);
         res.status(200).render('templates/home', {prods})
     }catch(e){
         res.status(500).render('templates/error', {e})
@@ -25,8 +25,8 @@ export const getProducts = async (req, res) => {
 }
 export const getProduct = async (req, res) => {
     try{
-        const idProduct = req.params.id
-        const prod = await productModel.findById(idProduct)
+        const idProd = req.params.pid
+        const prod = await productModel.findById(idProd)
         if(prod)
             res.status(200).render('templates/product', {prod})
         else
@@ -42,15 +42,15 @@ export const createProduct = async (req, res) => {
         const rta = await productModel.create(product)
         res.status(201).send('Producto creado con éxito')
     }catch(e){
-        res.status(500).render('templates/error', {e})
+        res.status(500).send(e)
     }
 }
 
 export const updateProduct = async (req, res) => {
     try{
-        const idProduct = req.params.pid
+        const idProd = req.params.pid
         const updateProduct= req.body
-        const rta = await cartModel.findByIdAndUpdate(idProduct, updateProduct)
+        const rta = await cartModel.findByIdAndUpdate(idProd, updateProduct)
         if(rta)
             res.status(200).redirect('templates/home', {rta})
         else
@@ -62,10 +62,10 @@ export const updateProduct = async (req, res) => {
 
 export const deleteProduct = async (req, res) => {
     try{
-        const idProduct = req.params.pid
-        const rta = await productModel.findByIdAndDelete(idProduct)
+        const idProd = req.params.pid
+        const rta = await productModel.findByIdAndDelete(idProd)
         if(rta)
-            res.status(200).redirect('templates/home', {rta})
+            res.status(200).redirect({rta},'templates/home')
         else
             res.status(404).render('templates/error', {e: 'Producto inexistente'})
     }catch(e){

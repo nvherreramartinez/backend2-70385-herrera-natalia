@@ -23,7 +23,7 @@ const cookieExtractor = (req) =>{
 export const passportCall = (strategy) => {
     return async(req,res,next) => {
         
-        passport.authenticate(strategy, function(err,user, info) {
+        passport.authenticate (strategy, function(err, user, info) {
             if(err) return next(err)
             
             if(!user) {
@@ -31,7 +31,7 @@ export const passportCall = (strategy) => {
             }
             req.user = user
             next()
-        } (req,res,next))
+        } (req, res, next))
     }
 }
 
@@ -42,12 +42,10 @@ const initializePassport = () => {
             const {first_name, last_name, email, password, age} = req.body
 
             const findUser = await userModel.findOne({email: email})
-            
-            
             if(!findUser) {
                 const user = await userModel.create({
-                    first_name : first_name,
-                    last_name : last_name, 
+                    first_name: first_name,
+                    last_name: last_name, 
                     email: email, 
                     password: createHash(password),
                     age: age
@@ -56,9 +54,7 @@ const initializePassport = () => {
             } else {
                 return done(null, false) 
             }
-    
         }catch (e) {
-            console.log(e);
             return done(e)
         }
     }))
@@ -74,19 +70,14 @@ const initializePassport = () => {
         }catch(e){
             return done(e)
         }
-
-        
-    
     }))
 
     passport.use('github', new GithubStrategy({
         clientID: "Ov23liHi8HwwYY1zNDc1",
         clientSecret: process.env.SECRET_GITHUB,
         callbackURL: "http://localhost:8080/api/sessions/githubcallback"
-    }, async (accessToken, refreshToken, profile, done) => {
+    }, async (profile, done) => {
         try {
-
-            
             let user = await userModel.findOne({email: profile._json.email}) 
             if(!user) {
                 const user = await userModel.create({
@@ -104,7 +95,6 @@ const initializePassport = () => {
             console.log(e);
             return done(e)
         }
-        
     }))
 
     passport.use('jwt', new JWTStrategy({
@@ -113,7 +103,6 @@ const initializePassport = () => {
     }, async (jwt_payload, done) => {
         try {
             console.log(jwt_payload);
-            
             return done(null, jwt_payload.user)
         }catch(e) {
             return done(err)

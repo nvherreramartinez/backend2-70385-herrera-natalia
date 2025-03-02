@@ -1,6 +1,7 @@
 import cartModel from '../models/cart.js'
 import productModel from '../models/product.js'
-import ticketModel from '../models/ticket.js'   
+import ticketModel from '../models/ticket.js'  
+import crypto from 'crypto' 
 
 export const getCart = async (req, res) => {
     try{
@@ -115,49 +116,54 @@ export const deleteCart = async (req, res) => {
     }
 }
 export const checkoutCart = async (req, res) => {
-    try{
-        const cartId = req.params.cid
-        const cart = await cartModel.findBydid(cartId)
-        const prodStockNull = [] 
-        if(cart) {
-            for(const prod of cart.products) {
-                const product = await productModel.findById(prod.id_prod)
-                if(product.stock - prod.quantity < 0){
-                    prodStockNull.push(product.id)
-                }
-            }
-            if(prodStockNull.length === 0){
-                let totalAmount = 0;    
-                for (const prod of cart.products) {
-                    const producto = await productModel.findById(prod.id_prod);
-                    if (producto) {
-                        producto.stock -= prod.quantity;
-                        totalAmount += producto.price * prod.quantity;
-                        await producto.save();
-                    }
-                }
-                const newTicket = await ticketModel.create({
-                    code: crypto.randomUUID(),
-                    purchaser: req.user.email,
-                    amount: totalAmount,
-                    products: cart.products
-                });
-                await cartModel.findByIdAndUpdate(cartId, { products: []})
-                res.status(200).send(newTicket);
-            }else{
-                prodStockNull.forEach((prodId) => {
-                    cart.products = cart.products.filter(prod => prod.id_prod != prodId)
-                })
-                await cartModel.findByIdAndUpdate(cartId, {
-                    products: cart.products
-                })
-                res.status(404).send({message: "Stock insuficiente de: " + prodStockNull})
-            }
-        }else{
-            res.status(404).send({message: "Carrito inexistente"})
-        }
-    }catch(e){
-        res.status(500).render('templates/error', {e})
-    }
-}
+    try {
+        const cartId = req.params.cid;
+        const cart = await cartModel.findById(cartId).populate('products.id_prod');
 
+        if (!cart) {
+            return res.status(404).render('templates/error', { message: "Carrito inexistente" });
+        }
+        let totalAmount = 0;
+        const prodStockNull = [];
+
+        for (const prod of cart.products) {
+            const producto = prod.id_prod;
+            if (!producto || producto.stock < prod.quantity) {
+                prodStockNull.push(producto._id);
+            }
+        }
+
+        if (prodStockNull.length === 0) {
+
+            for (const prod of cart.products) {
+                const producto = prod.id_prod;
+                producto.stock -= prod.quantity;
+                totalAmount += producto.price * prod.quantity;
+                await producto.save();
+            }
+
+            const newTicket = await ticketModel.create({
+                code: crypto.randomUUID(),
+                purchaser: req.user.email,
+                amount: totalAmount,
+                products: cart.products
+            });
+
+            await cartModel.findByIdAndUpdate(cartId, { products: [] });
+
+            return res.status(200).render('templates/ticket', { ticket: newTicket });
+        } else {
+
+            cart.products = cart.products.filter(prod => !prodStockNull.includes(prod.id_prod._id));
+
+            await cartModel.findByIdAndUpdate(cartId, { products: cart.products });
+
+            return res.status(400).render('templates/error', {
+                message: "Algunos productos no tienen stock",
+                productsWithoutStock: prodStockNull
+            });
+        }
+    } catch (e) {
+        res.status(500).render('templates/error', { message: "Error en el checkout", error: e.message });
+    }
+};

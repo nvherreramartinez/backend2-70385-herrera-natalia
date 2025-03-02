@@ -27,7 +27,7 @@ export const register = async (req, res) => {
         if(!req.user){
             return res.status(400).send("El mail ya se encuentra registrado");
         }
-        res.status(201).send("Usuario creado con éxito");
+        res.status(201).send({message: "Usuario creado con éxito"})
     }catch(e){
         console.log(e);
         res.status(500).send("Error al crear usuario")
