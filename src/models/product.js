@@ -36,6 +36,9 @@ const productSchema = new Schema({
         default:[]
     }
 })
+
 productSchema.plugin(paginate);
+
 const productModel = model('products', productSchema);   
+
 export default productModel

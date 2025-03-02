@@ -1,7 +1,6 @@
 import cartModel from '../models/cart.js'
 import productModel from '../models/product.js'
 import ticketModel from '../models/ticket.js'   
-import crypto from 'crypto'  
 
 export const getCart = async (req, res) => {
     try{
@@ -10,7 +9,7 @@ export const getCart = async (req, res) => {
         if(cart)
             res.status(200).send(cart)
         else
-            res.status(404).send("No existe el carrito")
+            res.status(404).send("Carrito inexistente")
     }catch(e){
         res.status(500).render('templates/error', {e})
     }
@@ -68,7 +67,7 @@ export const updateQuantityProductCart = async (req, res) => {
             if(indice != -1){
                 cart.products[indice].quantity = quantity
                 cart.save()
-                res.status(200).send(rta)
+                res.status(200).send(cart)
             }else{
                 res.status(404).send("Producto inexistente")
             }

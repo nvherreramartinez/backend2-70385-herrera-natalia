@@ -1,4 +1,4 @@
-import e, { Router } from "express";
+import { Router } from "express";
 import productRouter from "./products.routes.js";
 import sessionRouter from "./sessions.routes.js";
 import cartRouter from "./carts.routes.js";

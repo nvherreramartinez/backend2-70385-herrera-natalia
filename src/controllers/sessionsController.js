@@ -10,8 +10,12 @@ export const login = async (req, res) => {
             email: req.user.email,
             first_name: req.user.first_name
         }
-        res.cookie('coderCookie', token, { httpOnly: true, secure: false, maxAge: 3600000})
-        res.status(200).redirect('/')
+
+        res.status(200).cookie('coderCookie', token, {
+            httpOnly: true,
+            secure: false,
+            maxAge: 3600000
+        }).send({message: "Usuario logueado correctamente"})
     }catch(e){
         console.log(e);
         res.status(500).send("Error al loguear usuario")
@@ -49,7 +53,12 @@ export const githublogin = (req, res) => {
             email: req.user.email,
             first_name: req.user.first_name
         }
-        res.status(200).redirect('/')
+        const token = generateToken(req.user)
+        res.status(200).cookie('coderCookie', token, {
+            httpOnly: true,
+            secure: false,
+            maxAge: 3600000
+        }).redirect("/api/products")
     }catch(e){
         console.log(e);
         res.status(500).send("Error al loguear usuario")
