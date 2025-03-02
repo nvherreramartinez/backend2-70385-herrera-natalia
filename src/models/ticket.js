@@ -6,7 +6,7 @@ const ticketSchema = new Schema({
         required: true,
         unique: true
     },
-    purchase_datatime: {
+    purchase_datetime: {
         type: Date,
         default: Date.now
     },

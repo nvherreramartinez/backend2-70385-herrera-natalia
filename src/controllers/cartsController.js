@@ -117,7 +117,7 @@ export const deleteCart = async (req, res) => {
 export const checkoutCart = async (req, res) => {
     try{
         const cartId = req.params.cid
-        const cart = await cartModel.findByIdid(cartId)
+        const cart = await cartModel.findBydid(cartId)
         const prodStockNull = [] 
         if(cart) {
             for(const prod of cart.products) {
