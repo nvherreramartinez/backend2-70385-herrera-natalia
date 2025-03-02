@@ -65,8 +65,5 @@ export const githublogin = (req, res) => {
     }
 }
 export const loginFail = (req, res) => {
-    res.status(401).render('error', { 
-        title: "Error de Login",
-        message: "Usuario o contraseña incorrectos."
-    });
+    res.render("error", { message: "Error al iniciar sesión" });
 };

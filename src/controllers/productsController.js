@@ -28,9 +28,9 @@ export const getProduct = async (req, res) => {
         const idProduct = req.params.id
         const prod = await productModel.findById(idProduct)
         if(prod)
-            res.status(200).send('templates/product', {prod})
+            res.status(200).render('templates/product', {prod})
         else
-            res.status(404).send('templates/error', {e: 'Producto inexistente'})
+            res.status(404).render('templates/error', {e: 'Producto inexistente'})
     } catch(e) {
         res.status(500).render('templates/error', {e})
     }
