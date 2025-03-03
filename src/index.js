@@ -11,6 +11,7 @@ import cookieParser from "cookie-parser";
 import indexRouter from "./routes/index.routes.js";
 import { create } from "express-handlebars";
 import cors from "cors";
+import { Session } from 'inspector/promises';
 
 
 const app = express()
@@ -26,7 +27,7 @@ app.use(session({
         mongoOptions: {},
         ttl: 1500000000
     }),
-    secret: process.env.SECRET_SESSION,
+    secret: SessionSecret,
     resave: true,
     saveUninitialized: true
 }))
